@@ -12,8 +12,12 @@ if (!existsSync(filePath)) {
 
 const db = new DatabaseSync(filePath, { readOnly: true });
 try {
+  const columns = db.prepare("PRAGMA table_info(calls)").all();
+  const callerColumn = columns.some((column) => column.name === "caller_number")
+    ? "caller_number"
+    : "NULL AS caller_number";
   const calls = db.prepare(`
-    SELECT vapi_call_id, started_at, ended_at, ended_reason,
+    SELECT vapi_call_id, ${callerColumn}, started_at, ended_at, ended_reason,
            transcript, transcript_status, received_at
     FROM calls ORDER BY received_at DESC LIMIT 10
   `).all();
@@ -25,6 +29,7 @@ try {
   for (const call of calls) {
     console.log("\n" + "=".repeat(60));
     console.log("通话 ID：" + call.vapi_call_id);
+    console.log("来电号码：" + (call.caller_number || "未知"));
     console.log("开始时间：" + (call.started_at || "未知"));
     console.log("结束时间：" + (call.ended_at || "未知"));
     console.log("结束原因：" + (call.ended_reason || "未知"));

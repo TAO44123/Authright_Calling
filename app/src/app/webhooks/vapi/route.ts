@@ -70,9 +70,12 @@ export async function POST(request: Request) {
   }
 
   const artifact = record(message.artifact);
+  const customer = record(message.customer);
+  const callCustomer = record(call.customer);
   try {
     saveCall({
       callId,
+      callerNumber: optionalString(customer.number) || optionalString(callCustomer.number),
       startedAt: optionalString(call.startedAt) || optionalString(message.startedAt),
       endedAt: optionalString(call.endedAt) || optionalString(message.endedAt),
       endedReason: optionalString(message.endedReason) || optionalString(call.endedReason),
