@@ -1,8 +1,10 @@
-# Vapi 配置步骤（Call Authright Demo）
+# Vapi 配置步骤（Call Authright）
 
 更新日期：2026-09-29
 
-## 当前阶段：先让真实来电接通
+当前号码为 `+17812096469`，已绑定 Assistant，并已把 Webhook Server 指向 `https://calling.authright.com/webhooks/vapi`。真实来电结束后，转写已成功写入线上 SQLite；当前部署状态见 [deploy/README.md](deploy/README.md)。以下步骤保留供以后检查或重新配置。
+
+## 初次配置：让真实来电接通
 
 ### 1. 登录与检查额度
 
@@ -41,19 +43,19 @@
 
 从手机直接拨打该号码，确认 AI 开场、能与你进行两轮对话。挂断后到 Vapi Dashboard 的 **Logs → Calls** 打开这通电话，查看文字转写。此时不需要网页、服务器或 HTTPS 回调。
 
-## 下一阶段：连接我们的转写保存服务
+## 连接转写保存服务（已完成）
 
-网页、Webhook 和 SQLite 服务位于 [`app/`](./app/README.md)。按 [EC2 部署计划](./EC2_部署计划.md)部署后，在 Assistant 的 **Advanced → Webhook Server / Server URL** 填服务器的 HTTPS 地址，例如 `https://call.example.com/webhooks/vapi`。在 Server Messages 中保留或选择 `end-of-call-report`；配置 `X-Vapi-Secret` 凭据，并与服务器 `.env.local` 的 `VAPI_WEBHOOK_SECRET` 保持一致，然后 **Publish**。Vapi 会在通话结束后把包含 `call.id` 和 `artifact.transcript` 的报告发送过来。不要把私钥放进网页。
+网页、Webhook 和 SQLite 服务位于 [`app/`](./app/README.md)。Assistant 的 **Advanced → Webhook Server / Server URL** 已填写 `https://calling.authright.com/webhooks/vapi`。已关联 Bearer Token Custom Credential：Header Name 为 `X-Vapi-Secret`、Bearer Prefix 关闭、Token 与服务器 `.env.local` 的 `VAPI_WEBHOOK_SECRET` 一致，并已发布 Assistant。Vapi 默认发送 `end-of-call-report`，无需寻找单独的开关。通话结束后，报告中的通话 ID 和文字转写会保存到 SQLite。不要把私钥放进网页。
 
-本机开发可以通过临时 HTTPS 隧道测试回调；正式演示采用 EC2 上的 Caddy 提供 HTTPS，不需要隧道。服务器域名变化后，需要同步更新 Vapi 的 Server URL。
+当前由 EC2 上的 Caddy 提供 HTTPS，不需要隧道。服务器域名变化后，需要同步更新 Vapi 的 Server URL。
 
 通话记录页 `/callrecord` 也支持手动从 Vapi 拉取最近的通话。此功能需要 Vapi **Private API Key**，只填写在应用服务器的 `.env.local` 中，变量名为 `VAPI_PRIVATE_API_KEY`；它与 Webhook 使用的 `VAPI_WEBHOOK_SECRET` 是两种不同的凭据。
 
-## 本阶段需要记录的信息
+## 当前已确认的信息
 
-- Assistant 名称或 ID
-- 入站电话号码（不是账号密钥）
-- 一通测试来电是否接通、Vapi 控制台是否出现文字转写
+- 号码：`+17812096469`
+- 真实来电可以接通，Vapi 控制台和网站记录页都能看到文字转写。
+- 线上 SQLite 已保存通话记录；记录页也可手动从 Vapi 刷新，按 call ID 去重。
 
 不要把 Vapi 私钥、电话服务商密钥或回调凭据写进仓库文件。
 

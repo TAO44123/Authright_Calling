@@ -1,6 +1,6 @@
-# Call Authright Demo
+# Call Authright
 
-本地 Next.js 演示应用。网页提供电话号码、Call 和复制号码；Vapi 通话结束后，将双方文字转写通过 Webhook 保存到本地 SQLite。
+Next.js 应用。网页提供电话号码、Call 和复制号码；Vapi 通话结束后，将双方文字转写通过 Webhook 保存到 SQLite。线上部署和真实来电验证结果见 [deploy/README.md](../deploy/README.md)。
 
 `/callrecord` 是独立的通话记录页，显示最近 100 通已保存来电的时间、来电号码（如果 Vapi 提供）、通话状态和完整文字转写。主页不显示该页入口。没有记录时，页面会显示空状态。
 
@@ -51,5 +51,6 @@ sqlite3 data/calls.sqlite "SELECT transcript FROM calls ORDER BY received_at DES
 ## 相关文档
 
 - [本项目的 Vapi 配置步骤](../Vapi_配置步骤.md)
-- [当前 EC2 部署计划](../EC2_部署计划.md)
+- [线上部署与验证记录](../deploy/README.md)
+- [EC2 初始部署计划（已实施）](../EC2_部署计划.md)
 - [初版最小实施方案（历史）](../Voice_Call_Transcript_Demo_Plan_v0.2.md)

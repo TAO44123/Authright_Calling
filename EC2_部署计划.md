@@ -1,6 +1,6 @@
-# Call Authright：EC2 最小部署计划
+# Call Authright：EC2 最小部署计划（已实施）
 
-实际部署环境与运行命令见 [deploy/README.md](deploy/README.md)。服务器为 Amazon Linux 2023 x86_64，已使用 Node.js 24 和 Caddy 部署到 `https://calling.authright.com`。下方规格是部署前的备选建议。
+实际部署环境、运行命令和真实来电验证结果见 [deploy/README.md](deploy/README.md)。服务器为 Amazon Linux 2023 x86_64，已使用 Node.js 24 和 Caddy 部署到 `https://calling.authright.com`。下方规格与步骤保留为部署前的参考方案。
 
 目标：网页显示 Vapi 电话号码；访客点击 Call 或复制号码拨打；Vapi 通话结束后通过 HTTPS Webhook 把文字转写写入 EC2 上的 SQLite。
 
@@ -32,7 +32,7 @@
 - 网页和回调可以共用同一个域名与 EC2；不需要隧道或额外数据库服务。
 - SQLite 文件留在这台机器的 EBS 上。重建实例、删除磁盘或更换部署目录时要保留数据库文件。
 - 通话记录可通过 `https://calling.authright.com/callrecord` 查看，主页不放入口。页面的 **Refresh from Vapi** 按钮会将该号码近期已结束的入站电话同步到 SQLite，通话 ID 去重。按当前演示版要求，页面和刷新接口公开访问。
-- 本地 `.env.local` 已包含号码和本地回调密钥，部署时不要提交到代码仓库或公开分享；服务器可生成新密钥，再同步设置 Vapi Credential。
+- 服务器 `.env.local` 保存号码、Vapi API 私钥和回调密钥，不提交到代码仓库或公开分享。更换回调密钥时，同步更新 Vapi Credential。
 
 ## 参考
 
