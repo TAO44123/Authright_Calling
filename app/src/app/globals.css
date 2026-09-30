@@ -68,8 +68,12 @@ a { color: inherit; }
 .records-heading { margin-bottom: 36px; }
 .records-kicker { margin: 0 0 14px; color: var(--blue); font-size: 12px; font-weight: 800; letter-spacing: .15em; }
 .records-title-row { display: flex; align-items: center; justify-content: space-between; gap: 20px; }
+.records-actions { display: flex; align-items: flex-start; gap: 12px; }
 .records-title-row h1 { margin: 0; font-size: clamp(42px, 5vw, 64px); font-weight: 850; letter-spacing: -.065em; line-height: 1.1; }
 .records-count { padding: 9px 14px; border: 1px solid var(--line-strong); border-radius: 999px; background: var(--blue-soft); color: var(--blue-dark); font-size: 13px; font-weight: 750; white-space: nowrap; }
+.records-refresh { text-align: right; }
+.records-refresh-button { min-height: 38px; padding: 7px 14px; border-radius: 6px; font-size: 13px; white-space: nowrap; }
+.records-refresh-status { max-width: 350px; margin: 8px 0 0; color: var(--muted); font-size: 12px; line-height: 1.5; }
 .records-heading > p:last-child { margin: 16px 0 0; color: var(--muted); font-size: 16px; line-height: 1.6; }
 .records-empty { display: flex; min-height: 300px; flex-direction: column; align-items: center; justify-content: center; padding: 36px; border: 1px dashed var(--line-strong); border-radius: 12px; background: rgba(255, 255, 255, .64); text-align: center; }
 .records-empty-icon { display: grid; place-items: center; width: 58px; height: 58px; border-radius: 12px; background: var(--blue-soft); color: var(--blue); font-size: 30px; }
@@ -115,6 +119,8 @@ a { color: inherit; }
   .records-main { padding: 46px 18px 64px; }
   .records-heading { margin-bottom: 26px; }
   .records-title-row { align-items: flex-start; flex-direction: column; gap: 15px; }
+  .records-actions { align-items: flex-start; flex-wrap: wrap; }
+  .records-refresh { text-align: left; }
   .records-heading > p:last-child { font-size: 14px; }
   .record-summary { gap: 12px; padding: 20px 17px; }
   .record-summary-main strong { font-size: 16px; }

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { connection } from "next/server";
 import { listCalls } from "@/lib/calls";
+import RefreshButton from "./refresh-button";
 
 export const runtime = "nodejs";
 
@@ -55,7 +56,10 @@ export default async function CallRecordPage() {
           <p className="records-kicker">INCOMING CALLS</p>
           <div className="records-title-row">
             <h1>Call records</h1>
-            <span className="records-count">{calls.length === 100 ? "Latest 100 calls" : `${calls.length} ${calls.length === 1 ? "call" : "calls"}`}</span>
+            <div className="records-actions">
+              <span className="records-count">{calls.length === 100 ? "Latest 100 calls" : `${calls.length} ${calls.length === 1 ? "call" : "calls"}`}</span>
+              <RefreshButton />
+            </div>
           </div>
           <p>Review call details and the conversation saved after each call.</p>
         </div>

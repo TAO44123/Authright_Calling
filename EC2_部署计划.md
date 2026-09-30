@@ -12,7 +12,7 @@
 ## 部署顺序
 
 1. **创建 EC2 与域名。**给实例固定公网 IP，并将一个子域名（如 `call.example.com`）的 A 记录指向它。安全组开放入站 TCP 80、443；SSH 22 只允许自己的 IP。不要对公网开放 3000。
-2. **安装并启动应用。**在服务器安装 Node.js 24，上传 `app/` 的项目代码，执行 `npm ci`、`npm run build`。创建仅服务端可读的 `.env.local`，设置 `VAPI_PHONE_NUMBER=+17812096469`、`VAPI_WEBHOOK_SECRET=<随机长密钥>`、`CALLS_DB_PATH=/var/lib/call-authright/calls.sqlite`。创建数据库目录并赋予运行应用的用户写权限。通过 systemd 运行 `npm run start -- -H 127.0.0.1 -p 3000`，设置开机自启。
+2. **安装并启动应用。**在服务器安装 Node.js 24，上传 `app/` 的项目代码，执行 `npm ci`、`npm run build`。创建仅服务端可读的 `.env.local`，设置 `VAPI_PHONE_NUMBER=+17812096469`、`VAPI_WEBHOOK_SECRET=<随机长密钥>`、`VAPI_PRIVATE_API_KEY=<Vapi 私钥>`、`CALLS_DB_PATH=/var/lib/call-authright/calls.sqlite`。创建数据库目录并赋予运行应用的用户写权限。通过 systemd 运行 `npm run start -- -H 127.0.0.1 -p 3000`，设置开机自启。
 3. **配置 Caddy。**安装 Caddy，将域名代理到本机应用：
 
    ```caddyfile
@@ -29,7 +29,7 @@
 
 - 网页和回调可以共用同一个域名与 EC2；不需要隧道或额外数据库服务。
 - SQLite 文件留在这台机器的 EBS 上。重建实例、删除磁盘或更换部署目录时要保留数据库文件。
-- 通话记录可通过 `https://call.example.com/callrecord` 查看，主页不放入口。当前页面无登录保护；开放真实用户使用前应增加访问控制。
+- 通话记录可通过 `https://call.example.com/callrecord` 查看，主页不放入口。页面的 **Refresh from Vapi** 按钮会将该号码近期已结束的入站电话同步到 SQLite，通话 ID 去重。当前页面和刷新接口均无登录保护；开放真实用户使用前应增加访问控制。
 - 本地 `.env.local` 已包含号码和本地回调密钥，部署时不要提交到代码仓库或公开分享；服务器可生成新密钥，再同步设置 Vapi Credential。
 
 ## 参考

@@ -43,9 +43,11 @@
 
 ## 下一阶段：连接我们的转写保存服务
 
-本地网页、Webhook 和 SQLite 服务位于 [`app/`](./app/README.md)。启动后，在 Assistant 的 **Advanced → Webhook Server / Server URL** 填公开 HTTPS 隧道地址，例如 `https://<tunnel-domain>/webhooks/vapi`。在 Server Messages 中保留或选择 `end-of-call-report`；配置 `X-Vapi-Secret` 凭据，并与本地 `.env.local` 的 `VAPI_WEBHOOK_SECRET` 保持一致，然后 **Publish**。Vapi 会在通话结束后把包含 `call.id` 和 `artifact.transcript` 的报告发送过来。不要把私钥放进网页。
+网页、Webhook 和 SQLite 服务位于 [`app/`](./app/README.md)。按 [EC2 部署计划](./EC2_部署计划.md)部署后，在 Assistant 的 **Advanced → Webhook Server / Server URL** 填服务器的 HTTPS 地址，例如 `https://call.example.com/webhooks/vapi`。在 Server Messages 中保留或选择 `end-of-call-report`；配置 `X-Vapi-Secret` 凭据，并与服务器 `.env.local` 的 `VAPI_WEBHOOK_SECRET` 保持一致，然后 **Publish**。Vapi 会在通话结束后把包含 `call.id` 和 `artifact.transcript` 的报告发送过来。不要把私钥放进网页。
 
-本机服务可使用 HTTP；由隧道提供公网 HTTPS 地址。无需先部署正式服务器。隧道地址变化后，需要同步更新 Vapi 的 Server URL。
+本机开发可以通过临时 HTTPS 隧道测试回调；正式演示采用 EC2 上的 Caddy 提供 HTTPS，不需要隧道。服务器域名变化后，需要同步更新 Vapi 的 Server URL。
+
+通话记录页 `/callrecord` 也支持手动从 Vapi 拉取最近的通话。此功能需要 Vapi **Private API Key**，只填写在应用服务器的 `.env.local` 中，变量名为 `VAPI_PRIVATE_API_KEY`；它与 Webhook 使用的 `VAPI_WEBHOOK_SECRET` 是两种不同的凭据。
 
 ## 本阶段需要记录的信息
 
