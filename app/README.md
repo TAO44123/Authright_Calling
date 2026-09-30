@@ -23,15 +23,15 @@
 
 ## 连接 Vapi 回调
 
-1. 按 [EC2 部署计划](../EC2_部署计划.md)将应用放到有 HTTPS 的服务器。本地临时测试也可使用 HTTPS 隧道公开 3000 端口。
+1. 按 [EC2 部署记录](../deploy/README.md)将应用放到有 HTTPS 的服务器。
 2. 在已保存的 Vapi Assistant 中，将 **Server URL** 设为 `https://<服务器域名>/webhooks/vapi`。
 3. 在 Vapi 创建一个自定义 Bearer Token 凭据：Header Name 使用 `X-Vapi-Secret`，关闭 Bearer Prefix，Token 与 `.env.local` 中的 `VAPI_WEBHOOK_SECRET` 相同。把此凭据关联到 Assistant 的 Server URL。
-4. 确认 Server Messages 包含 `end-of-call-report`，并发布 Assistant。
+4. 发布 Assistant。Vapi 默认发送 `end-of-call-report`，无需单独设置。
 5. 打电话、挂断后，在本目录运行 `npm run calls`，读出最近十通的文字转写。数据库默认保存在 `data/calls.sqlite`。
 
 不要把 `.env.local` 提交或分享给他人。服务器域名变化后，要更新 Vapi 的 Server URL。本轮只保存文字转写，不保存音频，也不创建预约。
 
-当前 `/callrecord` 没有登录保护。部署到公网后，知道该路径的人可以查看通话转写；开放真实用户使用前需要增加访问控制。
+按当前演示版要求，`/callrecord` 没有登录保护；知道该路径的人可以查看通话转写。
 
 ## 查看 SQLite 内容
 

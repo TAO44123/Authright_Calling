@@ -1,0 +1,18 @@
+[Unit]
+Description=Call Authright web application
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=simple
+User=ec2-user
+Group=ec2-user
+WorkingDirectory=/opt/call-authright/app
+Environment=NODE_ENV=production
+ExecStart=/usr/bin/npm run start -- -H 127.0.0.1 -p 3000
+Restart=on-failure
+RestartSec=5
+UMask=0077
+
+[Install]
+WantedBy=multi-user.target
